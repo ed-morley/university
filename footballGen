@@ -1,0 +1,144 @@
+import java.io.File; //imported to scan from a specific file
+import java.util.Scanner; //imported the scanner class to read from keyboard
+
+public class results_generator {
+
+	private static Scanner scan;
+
+    public static void main(String[] args) {
+        
+    	scan = new Scanner(System.in);
+        
+    	String input;
+		String [] home_name = new String [99];
+		String [] away_name = new String [99];
+		int [] home_score = new int[99];
+		int [] away_score = new int[99];
+		String [] result = new String[396]; // allows 99 different array elements each for each different piece of data required 
+		int count = 0;	//Keep track of which match we are currently processing; at the end will be the total number of valid matches
+		int invalid = 0; // Keep track of the invalid data that is inputed, this will be recorded in the catch statement
+
+
+		System.out.println("Please copy and paste the above results into this generator to view the outcome of the games! "); //the user takes the information from the text file and copies it into the console to enter the results. Kept like this so that the user can easily change the code to make it be typed in.  
+		System.out.println("Make sure the results of the match in the following format- HomeTeam Name : AwayTeam Name : HomeTeam Score : AwayTeam Score");
+		System.out.println("When you have finished, please type stop");
+		
+		try 
+		{
+			
+		input = scan.nextLine();	
+		
+		while (!(input.equals("stop")))		//While input does not equal stop, do the loop
+		{
+			result = input.split(" : "); 		// Splits the line up into 4 seperate values based on the location of the semi colon.
+			home_name[count] = result[0].trim();
+			away_name[count] = result[1].trim();
+			home_score[count] = Integer.parseInt( result[2].trim() ); //converts a string into an integer as the score has to be a string for the arrays
+	        input = scan.nextLine(); 
+			away_score[count] = Integer.parseInt( result[3].trim() );
+			input = scan.nextLine(); 
+			count = count + 1; //Keeps track of which match we are inputting 
+		}
+			
+		}
+			catch (Exception e) //makes sure that there are no errors in the results (input)
+			{
+				System.out.println("There is an error in the result typed! ");
+				invalid ++;
+				System.out.println("Please input your data in the following format home team name : away team name : hometeamscore : awayteamscore");
+				input = scan.nextLine();
+				
+				try{
+					
+				while (!(input.equals("stop")))
+				{
+					result = input.split(" : "); 		
+					home_name[count] = result[0];
+					away_name[count] = result[1];
+					home_score[count] = Integer.parseInt( result[2].trim() ); 
+					away_score[count] = Integer.parseInt( result[3].trim() );
+					input = scan.nextLine(); 
+					count++; 
+					
+				}
+				
+				}
+					catch (Exception d)
+					{
+						System.out.println("Please Make Sure the data you have entered is in a valid format");
+						System.out.println("Please input your data in the following format home team name : away team name : hometeamscore : awayteamscore");
+						invalid ++;
+						input = scan.nextLine();	
+					}
+			}
+		
+		int games = count;
+		count = 0;
+		while(games != count ) 
+		{
+			System.out.print("\n");
+			System.out.print(home_name[count] + " ");
+			System.out.print("[" + home_score[count] + "]");
+			System.out.print(" | ");
+			System.out.print(away_name[count] + " ");
+			System.out.print("[" + away_score[count] + "]");
+			System.out.print("\n");
+			count++;
+			
+		}	
+
+		
+		
+		
+		
+		// Requirement Three
+		
+		int total_matches = count;		// the count from above will be checked and gives us the total				
+		int total_home_goals = 0; 
+		int total_away_goals = 0;
+		int highest_home_score = home_score[0]; //this allows us to start at the first element of the array and from there we can go through each element to find the biggest number
+		int highest_away_score = away_score[0];
+		
+		//Printed Lines
+		
+		System.out.print("\n");
+		System.out.println("Totals");
+		System.out.println("---------------------");
+		System.out.println("Total number of matches played " + total_matches);
+		
+		//Total Amount of Goals Scored
+		
+		for(int k = 0; k < home_score.length; k++) //this will go through the array for home team scores and add each element up until the total amount of elements is the same as the increments that the loop has taken
+		{
+		    total_home_goals += home_score[k];
+		}
+		System.out.println("Total home score: " + total_home_goals);
+		
+		for(int l = 0; l < away_score.length; l++)
+		{
+		    total_away_goals += away_score[l];
+		}
+		System.out.println("Total away score: " + total_away_goals);
+		
+		// Highest Number of Goals Scored
+		
+		for(int i=1; i< home_score.length; i++) 			//will go through each element until the array is at its length, from there it will compare each element and if it is highest then it will become the new integer i
+        {
+                if(home_score[i] > highest_home_score)
+                        highest_home_score = home_score[i];
+        }        
+		
+		System.out.println("Highest home score: " + highest_home_score);
+		
+		for(int j=1; j< away_score.length; j++)
+        {
+                if(away_score[j] > highest_away_score)
+                        highest_away_score = away_score[j];
+        }        
+		
+		System.out.println("Highest away score: " + highest_away_score);
+		
+		System.out.println("Invalid Enteries: " + invalid);
+	}
+
+}
